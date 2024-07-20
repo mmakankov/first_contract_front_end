@@ -1,6 +1,7 @@
 import "./App.css";
 import { TonConnectButton } from "@tonconnect/ui-react";
-import { useMainContract } from "./hooks/useMainContract";
+// import { useMainContract } from "./hooks/useMainContract";
+import { useMainContract } from "./hooks/useRouletteContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { fromNano } from "ton-core";
 import WebApp from "@twa-dev/sdk";
@@ -8,13 +9,14 @@ import WebApp from "@twa-dev/sdk";
 function App() {
   const {
     contract_address,
-    counter_value,
+    contributors_count,
     // recent_sender,
     // owner_address,
     contract_balance,
     sendIncrement,
     sendDeposit,
     sendWithdrawalRequest,
+    sendFinishGameRequest,
   } = useMainContract();
 
   const { connected } = useTonConnect()
@@ -33,7 +35,7 @@ function App() {
           <b>{WebApp.platform}</b>
           <br/>
           <b>Our contract Address</b>
-          <div className='Hint'>{contract_address?.slice(0, 30) + "..."}</div>
+          <div className='Hint'>{contract_address?.slice(0, 64) + "..."}</div>
           <b>Our contract Balance</b>
           {contract_balance && (
             <div className='Hint'>{fromNano(contract_balance)}</div>
@@ -42,7 +44,7 @@ function App() {
 
         <div className='Card'>
           <b>Counter Value</b>
-          <div>{counter_value ?? "Loading..."}</div>
+          <div>{contributors_count ?? "Loading..."}</div>
         </div>
 
         <br/>
@@ -63,7 +65,7 @@ function App() {
               sendIncrement();
             }}
           >
-            Increment by 5
+            Increment by 5 (not working)
           </a>
         )}
 
@@ -74,7 +76,7 @@ function App() {
               sendDeposit();
             }}
           >
-            Send Deposit 1 TON
+            Send Deposit 0.1 TON and connect to the game
           </a>
         )}
 
@@ -86,6 +88,17 @@ function App() {
             }}
           >
             Send withdrowal request 0.7 TON
+          </a>
+        )}
+
+        <br/>
+        {connected && (
+          <a
+            onClick={() => {
+              sendFinishGameRequest();
+            }}
+          >
+            Finish game! and receive the prize
           </a>
         )}
       </div>
