@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MainContract } from "../contracts/RouletteContract";
 import { useTonClient } from "./useTonClient";
 import { useAsyncInitialize } from "./useAsyncInitialize";
-import { Address, Cell, OpenedContract } from "ton-core";
+import { Address, OpenedContract } from "ton-core";
 import { toNano } from "ton-core";
 import { useTonConnect } from "./useTonConnect";
 
@@ -13,10 +13,11 @@ export function useMainContract() {
   const sleep = (time: number) => new Promise((resolve) => setTimeout(resolve, time));
 
   const [contractData, setContractData] = useState<null | {
+    is_timer_started: boolean;
     contributors_count: number;
-    recent_sender: Address;
-    owner_address: Address;
-    addresses: Cell;
+    recent_sender: string;
+    owner_address: string;
+    addresses: string;
   }>();
 
   const [balance, setBalance] = useState<null | number>(0);
@@ -24,7 +25,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQAVmtVevqq4tuGGgFzS6ICseocL2YZx4r6YKHC9sIrKTuZE")
+      Address.parse("EQCrgT_vSHjsfzRgD9O5oiZ8zNB28T0hAA0ZcQRbF1xT2GZs")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -34,13 +35,21 @@ export function useMainContract() {
       if (!mainContract) return;
       setContractData(null);
       const val = await mainContract.getData();
-      const { balance } = await mainContract.getBalance();
+      var dictString = "null";
+      if (val.addresses != null) {
+        // const parsedObject = val.addresses.beginParse();
+        // const key: number = 0
+        // const dict = parsedObject.loadAddress();
+        dictString = val.addresses.toString();
+      }
       setContractData({
+        is_timer_started: val.is_timer_started,
         contributors_count: val.number,
-        recent_sender: val.recent_sender,
-        owner_address: val.owner_address,
-        addresses: val.addresses(),
+        recent_sender: val.recent_sender.toString(),
+        owner_address: val.owner_address.toString(),
+        addresses: dictString,//val.addresses != null ? val.addresses?.bits.toString() : "null",
       });
+      const { balance } = await mainContract.getBalance();
       setBalance(balance);
       await sleep(5000); // sleep 5 seconds and poll value again
       getValue();
@@ -51,7 +60,12 @@ export function useMainContract() {
   return {
     contract_address: mainContract?.address.toString(),
     contract_balance: balance,
-    ...contractData,
+    is_timer_started: contractData?.is_timer_started,
+    contributors_count: contractData?.contributors_count,
+    recent_sender: contractData?.recent_sender,
+    owner_address: contractData?.owner_address,
+    addresses: contractData?.addresses,
+    // ...contractData,
     sendIncrement: () => {
       return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
     },
@@ -62,7 +76,7 @@ export function useMainContract() {
       return mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
     },
     sendFinishGameRequest: () => {
-      return mainContract?.sendFinishGameRequest(sender, toNano("0.05"));
+      return mainContract?.sendFinishGameRequest(sender, toNano("0.06"));
     },
   };
 }

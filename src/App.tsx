@@ -9,10 +9,12 @@ import WebApp from "@twa-dev/sdk";
 function App() {
   const {
     contract_address,
-    contributors_count,
-    // recent_sender,
-    // owner_address,
     contract_balance,
+    is_timer_started,
+    contributors_count,
+    recent_sender,
+    owner_address,
+    addresses,
     sendIncrement,
     sendDeposit,
     sendWithdrawalRequest,
@@ -35,15 +37,27 @@ function App() {
           <b>{WebApp.platform}</b>
           <br/>
           <b>Our contract Address</b>
-          <div className='Hint'>{contract_address?.slice(0, 64) + "..."}</div>
+          <div className='Hint'>{contract_address?.slice(0, 64)}</div>
+          <br/>
+          <b>recent_sender Address</b>
+          <div className='Hint'>{recent_sender}</div>
+          <br/>
+          <b>owner_address Address</b>
+          <div className='Hint'>{owner_address}</div>
+          <br/>
+          <b>Participants:</b>
+          <div className='Hint'>{addresses}</div>
           <b>Our contract Balance</b>
           {contract_balance && (
             <div className='Hint'>{fromNano(contract_balance)}</div>
           )}
+          <br/>
+          <b>is_timer_started</b>
+          <div className='Hint'>{is_timer_started != null ? Number(is_timer_started ?? false) : "loading..."}</div>
         </div>
 
         <div className='Card'>
-          <b>Counter Value</b>
+          <b>contributors_count Value</b>
           <div>{contributors_count ?? "Loading..."}</div>
         </div>
 

@@ -1,6 +1,7 @@
 import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from "ton-core";
 
 export type MainContractConfig = {
+  is_timer_started: boolean;
   number: number;
   address: Address;
   owner_address: Address;
@@ -9,9 +10,11 @@ export type MainContractConfig = {
 
 export function mainContractConfigToCell(config: MainContractConfig): Cell {
   return beginCell()
+    .storeBit(config.is_timer_started)
     .storeUint(config.number, 32)
     .storeAddress(config.address)
     .storeAddress(config.owner_address)
+    .storeBit(false)
     .endCell();
 }
 
@@ -37,7 +40,7 @@ export class MainContract implements Contract {
     await provider.internal(via, {
       value,
       sendMode: SendMode.PAY_GAS_SEPARATELY,
-      body: beginCell().storeUint(2, 32).endCell(),
+      body: beginCell().endCell(),
     });
   }
 
@@ -61,11 +64,14 @@ export class MainContract implements Contract {
 
   async getData(provider: ContractProvider) {
     const { stack } = await provider.get("get_contract_storage_data", []);
+    // stack.skip(1)
+    console.log(stack)
     return {
+      is_timer_started: stack.readBoolean(),
       number: stack.readNumber(),
       recent_sender: stack.readAddress(),
       owner_address: stack.readAddress(),
-      addresses: stack.readCell,
+      addresses: stack.readCellOpt(),
     };
   }
 

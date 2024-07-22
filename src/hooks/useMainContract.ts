@@ -49,6 +49,7 @@ export function useMainContract() {
   return {
     contract_address: mainContract?.address.toString(),
     contract_balance: balance,
+    owner_address: contractData?.owner_address,
     ...contractData,
     sendIncrement: () => {
       return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
