@@ -14,6 +14,7 @@ function App() {
     contributors_count,
     recent_sender,
     owner_address,
+    timer_address,
     addresses,
     sendIncrement,
     sendDeposit,
@@ -38,12 +39,12 @@ function App() {
           <br/>
           <b>Our contract Address</b>
           <div className='Hint'>{contract_address?.slice(0, 64)}</div>
-          <br/>
           <b>recent_sender Address</b>
           <div className='Hint'>{recent_sender}</div>
-          <br/>
           <b>owner_address Address</b>
           <div className='Hint'>{owner_address}</div>
+          <b>timer_address Address</b>
+          <div className='Hint'>{timer_address}</div>
           <br/>
           <b>Participants:</b>
           <div className='Hint'>{addresses}</div>
@@ -90,7 +91,7 @@ function App() {
               sendDeposit();
             }}
           >
-            Send Deposit 0.1 TON and connect to the game
+            Send Deposit 0.51 TON and connect to the game
           </a>
         )}
 

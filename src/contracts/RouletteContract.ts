@@ -5,7 +5,8 @@ export type MainContractConfig = {
   number: number;
   address: Address;
   owner_address: Address;
-  addresses: Cell; //Dictionary<any, Address>
+  timer_address: Address;
+  addresses: Cell;
 };
 
 export function mainContractConfigToCell(config: MainContractConfig): Cell {
@@ -14,6 +15,7 @@ export function mainContractConfigToCell(config: MainContractConfig): Cell {
     .storeUint(config.number, 32)
     .storeAddress(config.address)
     .storeAddress(config.owner_address)
+    .storeAddress(config.timer_address)
     .storeBit(false)
     .endCell();
 }
@@ -71,6 +73,7 @@ export class MainContract implements Contract {
       number: stack.readNumber(),
       recent_sender: stack.readAddress(),
       owner_address: stack.readAddress(),
+      timer_address: stack.readAddress(),
       addresses: stack.readCellOpt(),
     };
   }

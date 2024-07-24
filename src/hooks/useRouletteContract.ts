@@ -17,6 +17,7 @@ export function useMainContract() {
     contributors_count: number;
     recent_sender: string;
     owner_address: string;
+    timer_address: String;
     addresses: string;
   }>();
 
@@ -25,7 +26,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQCrgT_vSHjsfzRgD9O5oiZ8zNB28T0hAA0ZcQRbF1xT2GZs")
+      Address.parse("EQAlaHPgz1mXR7WD_F2RXs-4NdFVgVu3IV2e1TfMbkvcxVwv")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -37,9 +38,6 @@ export function useMainContract() {
       const val = await mainContract.getData();
       var dictString = "null";
       if (val.addresses != null) {
-        // const parsedObject = val.addresses.beginParse();
-        // const key: number = 0
-        // const dict = parsedObject.loadAddress();
         dictString = val.addresses.toString();
       }
       setContractData({
@@ -47,7 +45,8 @@ export function useMainContract() {
         contributors_count: val.number,
         recent_sender: val.recent_sender.toString(),
         owner_address: val.owner_address.toString(),
-        addresses: dictString,//val.addresses != null ? val.addresses?.bits.toString() : "null",
+        timer_address: val.timer_address.toString(),
+        addresses: dictString,
       });
       const { balance } = await mainContract.getBalance();
       setBalance(balance);
@@ -64,13 +63,13 @@ export function useMainContract() {
     contributors_count: contractData?.contributors_count,
     recent_sender: contractData?.recent_sender,
     owner_address: contractData?.owner_address,
+    timer_address: contractData?.timer_address,
     addresses: contractData?.addresses,
-    // ...contractData,
     sendIncrement: () => {
       return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
     },
     sendDeposit: () => {
-      return mainContract?.sendDeposit(sender, toNano("0.1"));
+      return mainContract?.sendDeposit(sender, toNano("0.51"));
     },
     sendWithdrawalRequest: () => {
       return mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
