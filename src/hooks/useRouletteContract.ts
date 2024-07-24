@@ -19,6 +19,8 @@ export function useMainContract() {
     owner_address: string;
     timer_address: String;
     addresses: string;
+    bets: string;
+    total_sum: number;
   }>();
 
   const [balance, setBalance] = useState<null | number>(0);
@@ -26,7 +28,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQAlaHPgz1mXR7WD_F2RXs-4NdFVgVu3IV2e1TfMbkvcxVwv")
+      Address.parse("EQCMIJtmcW1z17GJ3yoIJdyANEumnwWO7GudpZd0CNGP5IL-")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -36,9 +38,13 @@ export function useMainContract() {
       if (!mainContract) return;
       setContractData(null);
       const val = await mainContract.getData();
-      var dictString = "null";
+      var addressesString = "null";
       if (val.addresses != null) {
-        dictString = val.addresses.toString();
+        addressesString = val.addresses.toString();
+      }
+      var betsString = "null";
+      if (val.bets != null) {
+        betsString = val.bets.toString();
       }
       setContractData({
         is_timer_started: val.is_timer_started,
@@ -46,7 +52,9 @@ export function useMainContract() {
         recent_sender: val.recent_sender.toString(),
         owner_address: val.owner_address.toString(),
         timer_address: val.timer_address.toString(),
-        addresses: dictString,
+        addresses: addressesString,
+        bets: betsString,
+        total_sum: val.total_sum,
       });
       const { balance } = await mainContract.getBalance();
       setBalance(balance);
@@ -65,6 +73,8 @@ export function useMainContract() {
     owner_address: contractData?.owner_address,
     timer_address: contractData?.timer_address,
     addresses: contractData?.addresses,
+    bets: contractData?.bets,
+    total_sum: contractData?.total_sum,
     sendIncrement: () => {
       return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
     },

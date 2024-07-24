@@ -66,7 +66,6 @@ export class MainContract implements Contract {
 
   async getData(provider: ContractProvider) {
     const { stack } = await provider.get("get_contract_storage_data", []);
-    // stack.skip(1)
     console.log(stack)
     return {
       is_timer_started: stack.readBoolean(),
@@ -75,6 +74,8 @@ export class MainContract implements Contract {
       owner_address: stack.readAddress(),
       timer_address: stack.readAddress(),
       addresses: stack.readCellOpt(),
+      bets: stack.readCellOpt(),
+      total_sum: stack.readNumber(),
     };
   }
 

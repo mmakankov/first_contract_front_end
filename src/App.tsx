@@ -16,6 +16,8 @@ function App() {
     owner_address,
     timer_address,
     addresses,
+    bets,
+    total_sum,
     sendIncrement,
     sendDeposit,
     sendWithdrawalRequest,
@@ -45,16 +47,18 @@ function App() {
           <div className='Hint'>{owner_address}</div>
           <b>timer_address Address</b>
           <div className='Hint'>{timer_address}</div>
-          <br/>
           <b>Participants:</b>
           <div className='Hint'>{addresses}</div>
+          <b>Bets:</b>
+          <div className='Hint'>{bets}</div>
           <b>Our contract Balance</b>
           {contract_balance && (
             <div className='Hint'>{fromNano(contract_balance)}</div>
           )}
-          <br/>
           <b>is_timer_started</b>
           <div className='Hint'>{is_timer_started != null ? Number(is_timer_started ?? false) : "loading..."}</div>
+          <b>total_sum</b>
+          <div className='Hint'>{total_sum ?? "loading..."}</div>
         </div>
 
         <div className='Card'>
