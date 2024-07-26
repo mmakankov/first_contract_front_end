@@ -28,7 +28,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQD5ojhemaRvYLfGat2dTLD_ip9e5oRlXJn86PZqoYitF1yW")
+      Address.parse("EQBkaE-rCJgGGHmTMkxOGDBGQzPO8BDuD6hiliK74HDJK0qs")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -79,10 +79,7 @@ export function useMainContract() {
       return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
     },
     sendDeposit: () => {
-      return mainContract?.sendDeposit(sender, toNano("0.51"));
-    },
-    sendWithdrawalRequest: () => {
-      return mainContract?.sendWithdrawalRequest(sender, toNano("0.05"), toNano("0.7"));
+      return mainContract?.sendDeposit(sender, toNano("0.1"));
     },
     sendFinishGameRequest: () => {
       return mainContract?.sendFinishGameRequest(sender, toNano("0.06"));

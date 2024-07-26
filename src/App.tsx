@@ -20,7 +20,6 @@ function App() {
     total_sum,
     sendIncrement,
     sendDeposit,
-    sendWithdrawalRequest,
     sendFinishGameRequest,
   } = useMainContract();
 
@@ -84,7 +83,7 @@ function App() {
               sendIncrement();
             }}
           >
-            Increment by 5 (not working)
+            Change owner (not working)
           </a>
         )}
 
@@ -95,18 +94,7 @@ function App() {
               sendDeposit();
             }}
           >
-            Send Deposit 0.51 TON and connect to the game
-          </a>
-        )}
-
-        <br/>
-        {connected && (
-          <a
-            onClick={() => {
-              sendWithdrawalRequest();
-            }}
-          >
-            Send withdrowal request 0.7 TON
+            Send Deposit 0.1 TON and connect to the game
           </a>
         )}
 
