@@ -28,7 +28,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQBkaE-rCJgGGHmTMkxOGDBGQzPO8BDuD6hiliK74HDJK0qs")
+      Address.parse("EQB-dYLdlRQFYL1NO-EpOU7SC61uQPlNhaFLY3MvfHCcLLnc")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -75,8 +75,11 @@ export function useMainContract() {
     addresses: contractData?.addresses,
     bets: contractData?.bets,
     total_sum: contractData?.total_sum,
-    sendIncrement: () => {
-      return mainContract?.sendIncrement(sender, toNano("0.05"), 5);
+    sendNewOwnerAddress: (ownerAddress: string) => {
+      return mainContract?.sendNewOwnerAddress(sender, toNano("0.05"), Address.parse(ownerAddress));
+    },
+    sendNewTimerAddress: (timerAddress: string) => {
+      return mainContract?.sendNewTimerAddress(sender, toNano("0.05"), Address.parse(timerAddress));
     },
     sendDeposit: () => {
       return mainContract?.sendDeposit(sender, toNano("0.1"));

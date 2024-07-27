@@ -18,7 +18,8 @@ function App() {
     addresses,
     bets,
     total_sum,
-    sendIncrement,
+    sendNewOwnerAddress,
+    sendNewTimerAddress,
     sendDeposit,
     sendFinishGameRequest,
   } = useMainContract();
@@ -80,11 +81,30 @@ function App() {
         {connected && (
           <a
             onClick={() => {
-              sendIncrement();
+              var input = document.getElementById('newOwnerAddressInput') as HTMLInputElement;
+              sendNewOwnerAddress(input.value);
             }}
           >
-            Change owner (not working)
+            Change owner
           </a>
+        )}
+        {connected && (
+          <input id="newOwnerAddressInput" type="text" name="newOwnerAddressInput"></input>
+        )}
+
+        <br />
+        {connected && (
+          <a
+            onClick={() => {
+              var input = document.getElementById('newTimerAddressInput') as HTMLInputElement;
+              sendNewTimerAddress(input.value);
+            }}
+          >
+            Change timer address
+          </a>
+        )}
+        {connected && (
+          <input id="newTimerAddressInput" type="text" name="newTimerAddressInput"></input>
         )}
 
         <br/> 
