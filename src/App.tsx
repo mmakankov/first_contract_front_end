@@ -2,6 +2,7 @@ import "./App.css";
 import { TonConnectButton } from "@tonconnect/ui-react";
 // import { useMainContract } from "./hooks/useMainContract";
 import { useMainContract } from "./hooks/useRouletteContract";
+import { useTimerContract } from "./hooks/useTimerContract";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { fromNano } from "ton-core";
 import WebApp from "@twa-dev/sdk";
@@ -24,6 +25,17 @@ function App() {
     sendDeposit,
     sendFinishGameRequest,
   } = useMainContract();
+
+  const {
+    schedule,
+    timerOwner,
+    timerCaller,
+    furthest_schedule,
+    timer_bounce_address,
+    sendNewTimerOwnerAddress,
+    sendNewTimerCallerAddress,
+    // sendTimerDeposit,
+  } = useTimerContract();
 
   const { connected } = useTonConnect()
 
@@ -130,6 +142,51 @@ function App() {
           >
             Finish game! and receive the prize
           </a>
+        )}
+
+        <br/>
+        <br/>
+        <div className='Card'>
+          <b>Timer schedule</b>
+          <div className='Hint'>{schedule}</div>
+          <b>Timer owner address</b>
+          <div className='Hint'>{timerOwner}</div>
+          <b>Timer caller address</b>
+          <div className='Hint'>{timerCaller}</div>
+          <b>Timer bounce address</b>
+          <div className='Hint'>{timer_bounce_address}</div>
+          <b>Scheduled at:</b>
+          <div className='Hint'>{furthest_schedule}</div>
+        </div>
+        <br/>
+
+        {connected && (
+          <a
+            onClick={() => {
+              var input = document.getElementById('newTimerOwnerAddressInput') as HTMLInputElement;
+              sendNewTimerOwnerAddress(input.value);
+            }}
+          >
+            Change timer owner address 
+          </a>
+        )}
+        {connected && (
+          <input id="newTimerOwnerAddressInput" type="text" name="newTimerOwnerAddressInput"></input>
+        )}
+
+        <br />
+        {connected && (
+          <a
+            onClick={() => {
+              var input = document.getElementById('newTimerCallerAddressInput') as HTMLInputElement;
+              sendNewTimerCallerAddress(input.value);
+            }}
+          >
+            Change timer caller address 
+          </a>
+        )}
+        {connected && (
+          <input id="newTimerCallerAddressInput" type="text" name="newTimerCallerAddressInput"></input>
         )}
       </div>
     </div>
