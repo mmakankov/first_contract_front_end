@@ -12,12 +12,13 @@ function App() {
     contract_balance,
     is_timer_started,
     contributors_count,
-    recent_sender,
+    last_winner,
     owner_address,
     timer_address,
     addresses,
     bets,
     total_sum,
+    timer_end_date,
     sendNewOwnerAddress,
     sendNewTimerAddress,
     sendDeposit,
@@ -41,8 +42,8 @@ function App() {
           <br/>
           <b>Our contract Address</b>
           <div className='Hint'>{contract_address?.slice(0, 64)}</div>
-          <b>recent_sender Address</b>
-          <div className='Hint'>{recent_sender}</div>
+          <b>last_winner Address</b>
+          <div className='Hint'>{last_winner}</div>
           <b>owner_address Address</b>
           <div className='Hint'>{owner_address}</div>
           <b>timer_address Address</b>
@@ -59,6 +60,8 @@ function App() {
           <div className='Hint'>{is_timer_started != null ? Number(is_timer_started ?? false) : "loading..."}</div>
           <b>total_sum</b>
           <div className='Hint'>{total_sum ?? "loading..."}</div>
+          <b>timer_end_date</b>
+          <div className='Hint'>{timer_end_date ?? "loading..."}</div>
         </div>
 
         <div className='Card'>
