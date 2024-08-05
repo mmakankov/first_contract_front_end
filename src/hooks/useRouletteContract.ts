@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { MainContract } from "../contracts/RouletteContract";
 import { useTonClient } from "./useTonClient";
 import { useAsyncInitialize } from "./useAsyncInitialize";
-import { Address, OpenedContract } from "ton-core";
+import { Address, OpenedContract, Dictionary } from "ton-core";
 import { toNano } from "ton-core";
 import { useTonConnect } from "./useTonConnect";
 
@@ -29,7 +29,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQCE57glbW7nQNr0c7hPWSvVw9DW31-A43F3XJzYySBocMmF")
+      Address.parse("EQBOataeZ_CbnqN86qm7LjhWAJjtcqhiFaBWMKLODyoJX5si")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -41,11 +41,26 @@ export function useMainContract() {
       const val = await mainContract.getData();
       var addressesString = "null";
       if (val.addresses != null) {
-        addressesString = val.addresses.toString();
+        var string = "";
+        var dict = Dictionary.loadDirect(Dictionary.Keys.Uint(16), Dictionary.Values.Address(), val.addresses)
+        for (let key = 0; key < dict.size; key++) {
+          var element = dict.get(key)?.toString();
+          console.log(element);
+          string = string + " " + element;
+        }
+        addressesString = string;
       }
       var betsString = "null";
       if (val.bets != null) {
-        betsString = val.bets.toString();
+        var string = "";
+        var betsDict = Dictionary.loadDirect(Dictionary.Keys.Uint(16), Dictionary.Values.Int(32), val.bets)
+        for (let key = 0; key < betsDict.size; key++) {
+          var bet = betsDict.get(key);
+          console.log(bet);
+          string = string + " " + bet?.toString();
+        }
+        betsString = string;
+
       }
       setContractData({
         is_timer_started: val.is_timer_started,
@@ -60,7 +75,7 @@ export function useMainContract() {
       });
       const { balance } = await mainContract.getBalance();
       setBalance(balance);
-      await sleep(5000); // sleep 5 seconds and poll value again
+      await sleep(10000); // sleep 5 seconds and poll value again
       getValue();
     }
     getValue();

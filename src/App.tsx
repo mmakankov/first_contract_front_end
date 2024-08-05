@@ -34,7 +34,7 @@ function App() {
     timer_bounce_address,
     sendNewTimerOwnerAddress,
     sendNewTimerCallerAddress,
-    // sendTimerDeposit,
+    sendScheduleTimer,
   } = useTimerContract();
 
   const { connected } = useTonConnect()
@@ -42,6 +42,29 @@ function App() {
   const showAlert = () => {
     WebApp.showAlert("Hey there!");
   };
+
+  // var isBotStarted = false;
+// 
+  // function startBot() {
+  //   isBotStarted = true;
+  //   proccessBot();
+  // }
+
+  // function stopBot() {
+  //   isBotStarted = false;
+  // }
+  
+  // function proccessBot() {
+  //   if (isBotStarted && connected) {
+  //     sendDeposit();
+  //   } else {
+  //     isBotStarted = false;
+  //   }
+  //   if (isBotStarted) {
+  //     setTimeout(proccessBot, 50000);
+  //   }
+  // }
+
 
   return (
     <div>
@@ -187,6 +210,16 @@ function App() {
         )}
         {connected && (
           <input id="newTimerCallerAddressInput" type="text" name="newTimerCallerAddressInput"></input>
+        )}
+        <br/> 
+        {connected && (
+          <a
+            onClick={() => {
+              sendScheduleTimer();
+            }}
+          >
+            Try to schedule timer
+          </a>
         )}
       </div>
     </div>

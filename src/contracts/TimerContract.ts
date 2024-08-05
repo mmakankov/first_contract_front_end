@@ -1,41 +1,39 @@
 import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from "ton-core";
 
-export type MainContractConfig = {
-  is_timer_started: boolean;
-  number: number;
-  address: Address;
-  owner_address: Address;
-  timer_address: Address;
-  addresses: Cell;
+export type TimerContractConfig = {
+  schedule: Cell;
+  timer_owner_address: Address;
+  timer_caller_address: Address;
+  furthest_schedule: number;
+  timer_bounce_address: Address;
 };
 
-export function mainContractConfigToCell(config: MainContractConfig): Cell {
+export function timerContractConfigToCell(config: TimerContractConfig): Cell {
   return beginCell()
-    .storeBit(config.is_timer_started)
-    .storeUint(config.number, 32)
-    .storeAddress(config.address)
-    .storeAddress(config.owner_address)
-    .storeAddress(config.timer_address)
     .storeBit(false)
+    .storeAddress(config.timer_owner_address)
+    .storeAddress(config.timer_caller_address)
+    .storeUint(config.furthest_schedule, 64)
+    .storeAddress(config. timer_bounce_address)
     .endCell();
 }
 
-export class MainContract implements Contract {
+export class TimerContract implements Contract {
   constructor(
     readonly address: Address,
     readonly init?: { code: Cell; data: Cell }
   ) {}
 
   static createFromConfig(
-    config: MainContractConfig,
+    config: TimerContractConfig,
     code: Cell,
     workchain = 0
   ) {
-    const data = mainContractConfigToCell(config);
+    const data = timerContractConfigToCell(config);
     const init = { code, data };
     const address = contractAddress(workchain, init);
 
-    return new MainContract(address, init);
+    return new TimerContract(address, init);
   }
 
   async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
@@ -48,7 +46,7 @@ export class MainContract implements Contract {
 
   async getData(provider: ContractProvider) {
     const { stack } = await provider.get("get_contract_storage_data", []);
-    console.log(stack)
+    // console.log(stack)
     return {
         schedule: stack.readCellOpt(),
         owner: stack.readAddress(),
@@ -94,9 +92,13 @@ export class MainContract implements Contract {
     });
   }
 
-  async sendDeposit(provider: ContractProvider, sender: Sender, value: bigint) {
+  async sendScheduleTimer(
+    provider: ContractProvider, 
+    sender: Sender, 
+    value: bigint
+  ) {
     const msg_body = beginCell()
-      .storeUint(3, 32) // OP code
+      .storeUint(619049418, 32) // OP code to schedule timer
       .endCell();
 
     await provider.internal(sender, {

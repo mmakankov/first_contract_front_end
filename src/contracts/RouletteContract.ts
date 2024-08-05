@@ -48,7 +48,6 @@ export class MainContract implements Contract {
 
   async getData(provider: ContractProvider) {
     const { stack } = await provider.get("get_contract_storage_data", []);
-    console.log(stack)
     return {
       is_timer_started: stack.readBoolean(),
       number: stack.readNumber(),

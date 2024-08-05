@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MainContract } from "../contracts/TimerContract";
+import { TimerContract } from "../contracts/TimerContract";
 import { useTonClient } from "./useTonClient";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { Address, OpenedContract } from "ton-core";
@@ -24,10 +24,10 @@ export function useTimerContract() {
 
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
-    const contract = new MainContract(
+    const contract = new TimerContract(
       Address.parse("EQDtJqDPxPpkNzh7BshU59_fDf_OTIBvRVovZanFAj-J9LS-")
     );
-    return client.open(contract) as OpenedContract<MainContract>;
+    return client.open(contract) as OpenedContract<TimerContract>;
   }, [client]);
 
   useEffect(() => {
@@ -66,8 +66,8 @@ export function useTimerContract() {
     sendNewTimerCallerAddress: (callerAddress: string) => {
       return mainContract?.sendNewCallerAddress(sender, toNano("0.05"), Address.parse(callerAddress));
     },
-    // sendTimerDeposit: () => {
-    //   return mainContract?.sendDeposit(sender, toNano("0.1"));
-    // },
+    sendScheduleTimer: () => {
+      return mainContract?.sendScheduleTimer(sender, toNano("0.05"));
+    },
   };
 }
