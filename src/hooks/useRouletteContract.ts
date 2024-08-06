@@ -29,7 +29,7 @@ export function useMainContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new MainContract(
-      Address.parse("EQBOataeZ_CbnqN86qm7LjhWAJjtcqhiFaBWMKLODyoJX5si")
+      Address.parse("EQDpD0o9C2q1F7qa1nTx1eyuPvUCNuAJFB-uF6qcJGXCi1Ml")
     );
     return client.open(contract) as OpenedContract<MainContract>;
   }, [client]);
@@ -53,7 +53,7 @@ export function useMainContract() {
       var betsString = "null";
       if (val.bets != null) {
         var string = "";
-        var betsDict = Dictionary.loadDirect(Dictionary.Keys.Uint(16), Dictionary.Values.Int(32), val.bets)
+        var betsDict = Dictionary.loadDirect(Dictionary.Keys.Uint(16), Dictionary.Values.Uint(64), val.bets)
         for (let key = 0; key < betsDict.size; key++) {
           var bet = betsDict.get(key);
           console.log(bet);
@@ -101,6 +101,9 @@ export function useMainContract() {
     },
     sendDeposit: () => {
       return mainContract?.sendDeposit(sender, toNano("0.1"));
+    },
+    sendDeposit5TON: () => {
+      return mainContract?.sendDeposit(sender, toNano("5"));
     },
     sendFinishGameRequest: () => {
       return mainContract?.sendFinishGameRequest(sender, toNano("0.06"));

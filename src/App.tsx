@@ -24,6 +24,7 @@ function App() {
     sendNewTimerAddress,
     sendDeposit,
     sendFinishGameRequest,
+    sendDeposit5TON,
   } = useMainContract();
 
   const {
@@ -42,29 +43,6 @@ function App() {
   const showAlert = () => {
     WebApp.showAlert("Hey there!");
   };
-
-  // var isBotStarted = false;
-// 
-  // function startBot() {
-  //   isBotStarted = true;
-  //   proccessBot();
-  // }
-
-  // function stopBot() {
-  //   isBotStarted = false;
-  // }
-  
-  // function proccessBot() {
-  //   if (isBotStarted && connected) {
-  //     sendDeposit();
-  //   } else {
-  //     isBotStarted = false;
-  //   }
-  //   if (isBotStarted) {
-  //     setTimeout(proccessBot, 50000);
-  //   }
-  // }
-
 
   return (
     <div>
@@ -153,6 +131,16 @@ function App() {
             }}
           >
             Send Deposit 0.1 TON and connect to the game
+          </a>
+        )}
+        <br/> 
+        {connected && (
+          <a
+            onClick={() => {
+              sendDeposit5TON();
+            }}
+          >
+            Send Deposit 5 TON and connect to the game
           </a>
         )}
 
