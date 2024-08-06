@@ -25,7 +25,7 @@ export function useTimerContract() {
   const mainContract = useAsyncInitialize(async () => {
     if (!client) return;
     const contract = new TimerContract(
-      Address.parse("EQDtJqDPxPpkNzh7BshU59_fDf_OTIBvRVovZanFAj-J9LS-")
+      Address.parse("EQCODDw6kXT_ASQQ8zMEt2VgtR2p_WtO_diP8n0_n-U__QQc")
     );
     return client.open(contract) as OpenedContract<TimerContract>;
   }, [client]);
